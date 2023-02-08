@@ -1,5 +1,6 @@
 package ru.yauroff.messagegenerator.service.impl;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +19,7 @@ import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
+@Data
 @Slf4j
 public class DataGeneratorServiceImpl implements DataGeneratorService {
     static final String[] MANUFACTURER = {"Sony", "LG", "Apple", "Huawei", "Samsung", "Hp", "Lenovo"};
