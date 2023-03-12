@@ -35,13 +35,16 @@ class KafkaProducerServiceImplTest {
 
     @Test
     void sendTelemetry() throws JsonProcessingException, ExecutionException, InterruptedException {
+        this.instance.setTopic("topic");
         TelemetryDTO telemetryDTO = new TelemetryDTO();
         when(objectMapper.writeValueAsString(telemetryDTO)).thenReturn(telemetryDTO.toString());
+        when(kafkaTemplate.send("topic", telemetryDTO.getUuid(), telemetryDTO.toString())).thenReturn(null);
 
         CompletableFuture<TelemetryDTO> result = this.instance.sendTelemetry(telemetryDTO);
         ArgumentCaptor<String> argumentTopic = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> argumentIdDto = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> argumentDtoAsString = ArgumentCaptor.forClass(String.class);
-        verify(this.kafkaTemplate).send(argumentTopic.capture(), argumentDtoAsString.capture());
+        verify(this.kafkaTemplate).send(argumentTopic.capture(), argumentIdDto.capture(), argumentDtoAsString.capture());
         assertEquals(argumentDtoAsString.getValue(), telemetryDTO.toString());
         assertTrue(result.isDone());
         assertEquals(result.get(), telemetryDTO);

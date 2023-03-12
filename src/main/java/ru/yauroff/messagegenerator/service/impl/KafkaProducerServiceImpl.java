@@ -2,6 +2,7 @@ package ru.yauroff.messagegenerator.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +17,7 @@ import java.util.concurrent.CompletableFuture;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Data
 public class KafkaProducerServiceImpl implements KafkaProducerService {
     @Value("${kafka.topic}")
     private String topic;
