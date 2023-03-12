@@ -27,7 +27,7 @@ public class KafkaProducerServiceImpl implements KafkaProducerService {
     @Async
     public CompletableFuture<TelemetryDTO> sendTelemetry(TelemetryDTO telemetryDTO) throws JsonProcessingException {
         String telemetryAsMessage = objectMapper.writeValueAsString(telemetryDTO);
-        kafkaTemplate.send(topic, telemetryAsMessage);
+        kafkaTemplate.send(topic, telemetryDTO.getUuid(), telemetryAsMessage);
         return CompletableFuture.completedFuture(telemetryDTO);
     }
 }
