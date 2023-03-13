@@ -1,0 +1,16 @@
+FROM openjdk:18-jdk-alpine
+
+ARG KAFKA_SERVER localhost:9092
+ENV KAFKA_SERVER ${KAFKA_SERVER}
+
+ARG AGENT_NUMBER 2
+ENV AGENT_NUMBER ${AGENT_NUMBER}
+
+ARG MESSAGE_NUMBER 2
+ENV MESSAGE_NUMBER ${MESSAGE_NUMBER}
+
+ARG JAR_FILE=target/message-generator.jar
+
+ADD ${JAR_FILE} app.jar
+
+ENTRYPOINT ["java","-jar","/app.jar"]
