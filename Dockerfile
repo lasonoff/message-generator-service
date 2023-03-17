@@ -1,5 +1,6 @@
 FROM openjdk:18-jdk-alpine
 
+# Kafka args
 ARG KAFKA_SERVER localhost:9092
 ENV KAFKA_SERVER ${KAFKA_SERVER}
 
