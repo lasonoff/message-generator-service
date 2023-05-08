@@ -41,6 +41,8 @@ public class TelemetryScheduler {
                                                kafkaProducerService.sendTelemetry(telemetryDTO);
                                            } catch (JsonProcessingException e) {
                                                log.error("Error convert object to json: {}", e.getMessage());
+                                           } catch (Exception e) {
+                                               log.error("Error send telemetry: {}", e.getMessage());
                                            }
                                        });
                           });
