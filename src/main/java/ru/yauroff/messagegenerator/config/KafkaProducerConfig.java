@@ -1,6 +1,7 @@
 package ru.yauroff.messagegenerator.config;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -19,6 +20,7 @@ import java.util.Map;
 @Configuration
 @EnableScheduling
 @RequiredArgsConstructor
+@Slf4j
 public class KafkaProducerConfig {
     @Value("${kafka.server}")
     private String kafkaServer;
@@ -30,6 +32,7 @@ public class KafkaProducerConfig {
 
     @Bean
     public Map<String, Object> producerConfigs() {
+        log.info("Kafka server {}", kafkaServer);
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
                 kafkaServer);
