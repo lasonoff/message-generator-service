@@ -46,7 +46,7 @@ public class KafkaProducerConfig {
         String PASS = "kafka-user";
         String jaasTemplate = "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";
         String jaasCfg = String.format(jaasTemplate, USER, PASS);
-        props.put("security.protocol", "SASL_SSL");
+        props.put("security.protocol", "SASL_PLAINTEXT");
         props.put("sasl.mechanism", "SCRAM-SHA-512");
         props.put("sasl.jaas.config", jaasCfg);
         return props;
