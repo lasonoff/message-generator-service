@@ -35,7 +35,7 @@ public class KafkaProducerConfig {
         log.info("Kafka server {}", kafkaServer);
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                "rc1a-nokm17o21lehpshh:9091");
+                kafkaServer);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
                 StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
@@ -46,6 +46,7 @@ public class KafkaProducerConfig {
         String PASS = "kafka-user";
         String jaasTemplate = "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";
         String jaasCfg = String.format(jaasTemplate, USER, PASS);
+        props.put("acks", "all");
         props.put("security.protocol", "SASL_PLAINTEXT");
         props.put("sasl.mechanism", "SCRAM-SHA-512");
         props.put("sasl.jaas.config", jaasCfg);
@@ -67,7 +68,7 @@ public class KafkaProducerConfig {
         return TopicBuilder
                 .name(kafkaTopic)
                 .partitions(agentNumber)
-                .replicas(1)
+                //.replicas(1)
                 .build();
     }
 }
