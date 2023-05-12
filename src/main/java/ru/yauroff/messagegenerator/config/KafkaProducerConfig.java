@@ -40,6 +40,15 @@ public class KafkaProducerConfig {
                 StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
                 StringSerializer.class);
+
+        // TODO: убрать хардкод с временными настройками
+        String USER = "kafka-user";
+        String PASS = "kafka-user";
+        String jaasTemplate = "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";
+        String jaasCfg = String.format(jaasTemplate, USER, PASS);
+        props.put("security.protocol", "SASL_SSL");
+        props.put("sasl.mechanism", "SCRAM-SHA-512");
+        props.put("sasl.jaas.config", jaasCfg);
         return props;
     }
 
