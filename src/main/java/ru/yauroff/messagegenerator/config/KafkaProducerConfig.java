@@ -35,7 +35,7 @@ public class KafkaProducerConfig {
         log.info("Kafka server {}", kafkaServer);
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                "rc1a-nokm17o21lehpshh:9091");
+                kafkaServer);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
                 StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
