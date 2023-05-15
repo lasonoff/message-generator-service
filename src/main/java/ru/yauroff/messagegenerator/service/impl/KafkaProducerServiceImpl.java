@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Async;
@@ -23,13 +25,16 @@ public class KafkaProducerServiceImpl implements KafkaProducerService {
     private String topic;
 
     private final ObjectMapper objectMapper;
-    private final KafkaTemplate<String, String> kafkaTemplate;
+
+    private final Producer<String, String> kafkaProducer;
+    //private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Override
     @Async
     public CompletableFuture<TelemetryDTO> sendTelemetry(TelemetryDTO telemetryDTO) throws JsonProcessingException {
         String telemetryAsMessage = objectMapper.writeValueAsString(telemetryDTO);
-        kafkaTemplate.send(topic, telemetryDTO.getUuid(), telemetryAsMessage);
+        //kafkaTemplate.send(topic, telemetryDTO.getUuid(), telemetryAsMessage);
+        kafkaProducer.send(new ProducerRecord<String, String>(topic, telemetryDTO.getUuid(), telemetryAsMessage));
         return CompletableFuture.completedFuture(telemetryDTO);
     }
 }

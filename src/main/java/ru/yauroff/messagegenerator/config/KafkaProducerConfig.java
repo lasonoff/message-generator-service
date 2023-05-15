@@ -2,16 +2,13 @@ package ru.yauroff.messagegenerator.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.admin.NewTopic;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.config.TopicBuilder;
-import org.springframework.kafka.core.DefaultKafkaProducerFactory;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.HashMap;
@@ -53,7 +50,7 @@ public class KafkaProducerConfig {
         return props;
     }
 
-    @Bean
+    /*@Bean
     public ProducerFactory<String, String> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
@@ -68,7 +65,11 @@ public class KafkaProducerConfig {
         return TopicBuilder
                 .name(kafkaTopic)
                 .partitions(agentNumber)
-                //.replicas(1)
+                .replicas(1)
                 .build();
+    }*/
+    @Bean
+    public Producer<String, String> kafkaProducer() {
+        return new KafkaProducer<>(producerConfigs());
     }
 }
