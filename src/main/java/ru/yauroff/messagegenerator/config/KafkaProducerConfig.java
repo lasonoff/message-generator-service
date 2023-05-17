@@ -19,11 +19,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 public class KafkaProducerConfig {
+    private final String JAAS_TEMPLATE = "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";
     @Value("${kafka.server}")
     private String kafkaServer;
-    @Value("${kafka.topic}")
-    private String kafkaTopic;
-
+    @Value("${kafka.user}")
+    private String kafkaUser;
+    @Value("${kafka.password}")
+    private String kafkaPassword;
     @Value("${agent.number}")
     private Integer agentNumber;
 
@@ -38,36 +40,16 @@ public class KafkaProducerConfig {
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
                 StringSerializer.class);
 
-        // TODO: убрать хардкод с временными настройками
-        String USER = "kafka-user";
-        String PASS = "kafka-user";
-        String jaasTemplate = "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";
-        String jaasCfg = String.format(jaasTemplate, USER, PASS);
-        props.put("acks", "all");
-        props.put("security.protocol", "SASL_PLAINTEXT");
-        props.put("sasl.mechanism", "SCRAM-SHA-512");
-        props.put("sasl.jaas.config", jaasCfg);
+        if (kafkaUser != null && !kafkaUser.isEmpty()) {
+            String jaasCfg = String.format(JAAS_TEMPLATE, kafkaUser, kafkaPassword);
+            props.put(ProducerConfig.ACKS_CONFIG, "all");
+            props.put("security.protocol", "SASL_PLAINTEXT");
+            props.put("sasl.mechanism", "SCRAM-SHA-512");
+            props.put("sasl.jaas.config", jaasCfg);
+        }
         return props;
     }
 
-    /*@Bean
-    public ProducerFactory<String, String> producerFactory() {
-        return new DefaultKafkaProducerFactory<>(producerConfigs());
-    }
-
-    @Bean
-    public KafkaTemplate<String, String> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
-    }
-
-    @Bean
-    public NewTopic topic() {
-        return TopicBuilder
-                .name(kafkaTopic)
-                .partitions(agentNumber)
-                .replicas(1)
-                .build();
-    }*/
     @Bean
     public Producer<String, String> kafkaProducer() {
         return new KafkaProducer<>(producerConfigs());
